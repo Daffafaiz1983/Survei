@@ -45,12 +45,36 @@
                             </div>
 
                             <div>
-                                <label for="category" class="block text-sm font-medium text-gray-700">Kategori</label>
-                                <input type="text" name="category" id="category" value="{{ old('category', $question->category) }}"
-                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Contoh: Pelayanan, Fasilitas, Dosen">
-                                @error('category')
+                                <label for="category_id" class="block text-sm font-medium text-gray-700">Kategori</label>
+                                <div class="flex gap-2">
+                                    <select name="category_id" id="category_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                        <option value="">Pilih Kategori</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}" {{ old('category_id', $question->category_id) == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" id="btn-open-category-modal" class="mt-1 inline-flex items-center px-3 rounded-md border border-gray-300 text-sm hover:bg-gray-50">Tambah</button>
+                                    <button type="button" id="btn-delete-category" class="mt-1 inline-flex items-center px-3 rounded-md border border-red-300 text-sm text-red-700 hover:bg-red-50">Hapus</button>
+                                </div>
+                                @error('category_id')
                                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                                 @enderror
+                            </div>
+
+                            <!-- Modal Tambah Kategori -->
+                            <div id="category-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center z-50">
+                                <div class="bg-white rounded-md shadow-lg w-full max-w-md p-6">
+                                    <h3 class="text-lg font-semibold mb-4">Tambah Kategori</h3>
+                                    <div class="space-y-3">
+                                        <label class="block text-sm font-medium text-gray-700">Nama Kategori</label>
+                                        <input type="text" id="new-category-name" class="block w-full rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Mis. Pelayanan" />
+                                        <p id="new-category-error" class="text-sm text-red-600 hidden"></p>
+                                    </div>
+                                    <div class="mt-6 flex justify-end gap-2">
+                                        <button type="button" id="btn-cancel-category" class="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300">Batal</button>
+                                        <button type="button" id="btn-save-category" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Simpan</button>
+                                    </div>
+                                </div>
                             </div>
 
                             <div>
@@ -63,6 +87,18 @@
                                     </label>
                                 </div>
                                 <p class="mt-1 text-sm text-gray-500">Centang jika pertanyaan ini wajib diisi oleh responden</p>
+                            </div>
+
+                            <div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="is_active" id="is_active" value="1" 
+                                           {{ old('is_active', $question->is_active) ? 'checked' : '' }}
+                                           class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                    <label for="is_active" class="ml-2 block text-sm text-gray-900">
+                                        Pertanyaan Aktif (buka/tutup)
+                                    </label>
+                                </div>
+                                <p class="mt-1 text-sm text-gray-500">Nonaktifkan untuk menutup pertanyaan.</p>
                             </div>
                         </div>
 

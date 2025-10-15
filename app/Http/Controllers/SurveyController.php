@@ -11,10 +11,12 @@ class SurveyController extends Controller
 {
     public function index()
     {
-        // Ambil hanya pertanyaan yang BELUM dijawab oleh user saat ini
-        $questions = Question::whereDoesntHave('answers', function ($query) {
-            $query->where('user_id', Auth::id());
-        })->get();
+        // Ambil hanya pertanyaan yang aktif dan BELUM dijawab oleh user saat ini
+        $questions = Question::where('is_active', true)
+            ->whereDoesntHave('answers', function ($query) {
+                $query->where('user_id', Auth::id());
+            })
+            ->get();
 
         // Jika tidak ada pertanyaan tersisa untuk dijawab, anggap sudah submit
         $hasSubmitted = $questions->count() === 0;

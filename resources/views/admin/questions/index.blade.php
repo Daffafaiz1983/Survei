@@ -29,6 +29,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tipe</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kategori</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Wajib</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal Dibuat</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                 </tr>
@@ -52,7 +53,7 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $question->category ?? '-' }}
+                                            {{ optional($question->categoryRef)->name ?? '-' }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             @if($question->is_required)
@@ -65,10 +66,20 @@
                                                 </span>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                            {{ $question->created_at->format('d/m/Y H:i') }}
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $question->is_active ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                                                {{ $question->is_active ? 'Aktif' : 'Tertutup' }}
+                                            </span>
                                         </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $question->created_at->format('d/m/Y H:i') }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <form action="{{ route('admin.questions.toggle', $question) }}" method="POST" class="inline">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="mr-3 {{ $question->is_active ? 'text-gray-600' : 'text-green-600' }} hover:underline">
+                                                    {{ $question->is_active ? 'Tutup' : 'Buka' }}
+                                                </button>
+                                            </form>
                                             <div class="flex space-x-2">
                                                 <a href="{{ route('admin.questions.show', $question->id) }}" class="text-indigo-600 hover:text-indigo-900">Lihat</a>
                                                 <a href="{{ route('admin.questions.edit', $question->id) }}" class="text-yellow-600 hover:text-yellow-900">Edit</a>

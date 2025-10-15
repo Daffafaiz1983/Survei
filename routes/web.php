@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\StatisticController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\FacilityImageController;
@@ -57,6 +58,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Kelola Pertanyaan
     Route::resource('questions', QuestionController::class);
+    Route::put('questions/{question}/toggle', [QuestionController::class, 'toggle'])->name('questions.toggle');
+
+    // Kelola Kategori Pertanyaan
+    Route::resource('categories', CategoryController::class)->parameters([
+        'categories' => 'category'
+    ]);
 
     // Lihat Statistik
     Route::get('/statistics', [StatisticController::class, 'index'])->name('statistics.index');

@@ -17,6 +17,15 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     
+                    @if(Auth::check() && Auth::user()->role === 'admin')
+                        <x-nav-link :href="route('admin.questions.index')" :active="request()->routeIs('admin.questions.*')">
+                            {{ __('Pertanyaan') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                            {{ __('Kategori') }}
+                        </x-nav-link>
+                    @endif
+
                     @if(Auth::check() && Auth::user()->role !== 'admin')
                         <x-nav-link :href="route('facility-images.create')" :active="request()->routeIs('facility-images.create')">
                             {{ __('Laporkan Fasilitas') }}
@@ -78,6 +87,15 @@
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
             
+            @if(Auth::check() && Auth::user()->role === 'admin')
+                <x-responsive-nav-link :href="route('admin.questions.index')" :active="request()->routeIs('admin.questions.*')">
+                    {{ __('Pertanyaan') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
+                    {{ __('Kategori') }}
+                </x-responsive-nav-link>
+            @endif
+
             @if(Auth::check() && Auth::user()->role !== 'admin')
                 <x-responsive-nav-link :href="route('facility-images.create')" :active="request()->routeIs('facility-images.create')">
                     {{ __('Laporkan Fasilitas') }}

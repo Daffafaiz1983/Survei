@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Question;
+use App\Models\Category;
 
 class QuestionController extends Controller
 {
@@ -13,8 +14,14 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        // Ambil semua pertanyaan dengan pagination
-        $questions = Question::orderBy('category')->paginate(10);
+        // Ambil pertanyaan beserta kategori (eager load) dan urutkan berdasarkan nama kategori lalu tanggal dibuat
+        $questions = Question::query()
+            ->with('categoryRef')
+            ->leftJoin('categories', 'categories.id', '=', 'questions.category_id')
+            ->select('questions.*')
+            ->orderByRaw('COALESCE(categories.name, "") asc')
+            ->orderByDesc('questions.created_at')
+            ->paginate(10);
         return view('admin.questions.index', compact('questions'));
     }
 
@@ -23,7 +30,8 @@ class QuestionController extends Controller
      */
     public function create()
     {
-        return view('admin.questions.create');
+        $categories = Category::orderBy('name')->get();
+        return view('admin.questions.create', compact('categories'));
     }
 
     /**
@@ -35,16 +43,19 @@ class QuestionController extends Controller
         $request->validate([
             'question_text' => 'required|string|max:1000',
             'question_type' => 'required|in:text,multiple_choice,rating',
-            'category' => 'nullable|string|max:100',
-            'is_required' => 'boolean'
+            'category_id' => 'nullable|exists:categories,id',
+            'is_required' => 'boolean',
+            'is_active' => 'boolean'
         ]);
 
         // Simpan pertanyaan baru
         Question::create([
             'question_text' => $request->question_text,
             'question_type' => $request->question_type,
-            'category' => $request->category,
+            'category' => null,
+            'category_id' => $request->category_id,
             'is_required' => $request->has('is_required'),
+            'is_active' => $request->boolean('is_active', true),
         ]);
 
         return redirect()->route('admin.questions.index')->with('success', 'Pertanyaan berhasil ditambahkan.');
@@ -65,7 +76,8 @@ class QuestionController extends Controller
     public function edit(string $id)
     {
         $question = Question::findOrFail($id);
-        return view('admin.questions.edit', compact('question'));
+        $categories = Category::orderBy('name')->get();
+        return view('admin.questions.edit', compact('question', 'categories'));
     }
 
     /**
@@ -77,8 +89,9 @@ class QuestionController extends Controller
         $request->validate([
             'question_text' => 'required|string|max:1000',
             'question_type' => 'required|in:text,multiple_choice,rating',
-            'category' => 'nullable|string|max:100',
-            'is_required' => 'boolean'
+            'category_id' => 'nullable|exists:categories,id',
+            'is_required' => 'boolean',
+            'is_active' => 'boolean'
         ]);
 
         $question = Question::findOrFail($id);
@@ -86,11 +99,21 @@ class QuestionController extends Controller
         $question->update([
             'question_text' => $request->question_text,
             'question_type' => $request->question_type,
-            'category' => $request->category,
+            'category' => null,
+            'category_id' => $request->category_id,
             'is_required' => $request->has('is_required'),
+            'is_active' => $request->boolean('is_active', true),
         ]);
 
         return redirect()->route('admin.questions.index')->with('success', 'Pertanyaan berhasil diperbarui.');
+    }
+
+    public function toggle(Question $question)
+    {
+        $question->is_active = !$question->is_active;
+        $question->save();
+
+        return redirect()->route('admin.questions.index')->with('success', 'Status pertanyaan diperbarui.');
     }
 
     /**
