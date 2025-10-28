@@ -1,0 +1,17 @@
+parameters:
+    ignoreErrors:
+        - '#Function \'connect\' is available since PHP 8\.4#'
+        - '#PDO::connect\(\)#'
+        - '#PDO::connect is available since PHP 8\.4#'
+    
+    paths:
+        - app/
+        - config/
+        - database/
+        - routes/
+    
+    excludePaths:
+        - vendor/
+        - node_modules/
+        - storage/
+        - bootstrap/cache/
