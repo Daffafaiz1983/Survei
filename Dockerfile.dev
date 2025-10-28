@@ -1,0 +1,95 @@
+# Development Dockerfile - Optimized
+FROM php:8.2-fpm-alpine
+
+# Install system dependencies in one layer
+RUN apk add --no-cache \
+    git \
+    curl \
+    libpng-dev \
+    libxml2-dev \
+    zip \
+    unzip \
+    oniguruma-dev \
+    libzip-dev \
+    freetype-dev \
+    libjpeg-turbo-dev \
+    libwebp-dev \
+    icu-dev \
+    postgresql-dev \
+    mysql-client \
+    nodejs \
+    npm \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
+    && docker-php-ext-install -j$(nproc) \
+        pdo \
+        pdo_mysql \
+        pdo_pgsql \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        gd \
+        zip \
+        intl \
+        opcache \
+    && apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
+    && pecl install redis \
+    && docker-php-ext-enable redis \
+    && apk del .build-deps \
+    && rm -rf /tmp/* /var/cache/apk/*
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy composer files
+COPY composer.json composer.lock ./
+
+# Copy essential Laravel files needed for composer scripts
+COPY artisan ./
+COPY bootstrap/ ./bootstrap/
+COPY app/ ./app/
+COPY config/ ./config/
+COPY database/ ./database/
+COPY routes/ ./routes/
+
+# Install PHP dependencies (including dev dependencies) and cleanup
+RUN composer install --optimize-autoloader --no-dev \
+    && composer clear-cache \
+    && rm -rf /root/.composer/cache
+
+# Copy package files
+COPY package*.json ./
+
+# Install Node.js dependencies and cleanup
+RUN npm install --production \
+    && npm cache clean --force \
+    && rm -rf /root/.npm
+
+# Copy remaining application code
+COPY . .
+
+# Set proper permissions and cleanup
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html/storage \
+    && chmod -R 755 /var/www/html/bootstrap/cache \
+    && rm -rf /var/www/html/node_modules/.cache \
+    && rm -rf /var/www/html/storage/logs/* \
+    && rm -rf /var/www/html/storage/framework/cache/* \
+    && rm -rf /var/www/html/storage/framework/sessions/* \
+    && rm -rf /var/www/html/storage/framework/views/*
+
+# Copy entrypoint script
+COPY docker/entrypoint.dev.sh /usr/local/bin/entrypoint.dev.sh
+RUN chmod +x /usr/local/bin/entrypoint.dev.sh
+
+# Expose port
+EXPOSE 8000
+
+# Use entrypoint script
+ENTRYPOINT ["/usr/local/bin/entrypoint.dev.sh"]
+
+# Default command
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

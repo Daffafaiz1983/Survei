@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\StatisticController;
+use App\Http\Controllers\Admin\SemesterReportController;
 use App\Http\Controllers\FacilityController;
 use App\Http\Controllers\FacilityImageController;
 
@@ -81,6 +82,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         // Kelola Gambar Fasilitas (Admin)
         Route::resource('facility-images', FacilityImageController::class);
         Route::put('/facility-images/{facilityImage}/status', [FacilityImageController::class, 'updateStatus'])->name('facility-images.update-status');
+
+        // Kelola Laporan Semester (Admin)
+        Route::get('/analytics', [SemesterReportController::class, 'analytics'])->name('semester-reports.analytics');
+        Route::resource('semester-reports', SemesterReportController::class);
+        Route::post('/semester-reports/{semesterReport}/publish', [SemesterReportController::class, 'publish'])->name('semester-reports.publish');
+        Route::post('/semester-reports/{semesterReport}/unpublish', [SemesterReportController::class, 'unpublish'])->name('semester-reports.unpublish');
+        Route::post('/semester-reports/{semesterReport}/regenerate-stats', [SemesterReportController::class, 'regenerateStats'])->name('semester-reports.regenerate-stats');
+        Route::get('/semester-reports/{semesterReport}/statistics', [SemesterReportController::class, 'getStatistics'])->name('semester-reports.statistics');
+        Route::get('/semester-reports/{semesterReport}/export-pdf', [SemesterReportController::class, 'exportPdf'])->name('semester-reports.export-pdf');
 });
 
 

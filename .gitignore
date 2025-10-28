@@ -22,3 +22,21 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Docker
+docker-compose.override.yml
+docker-compose.local.yml
+.docker/
+
+# SSL Certificates
+docker/nginx/ssl/*.crt
+docker/nginx/ssl/*.key
+docker/nginx/ssl/*.pem
+
+# Database backups
+*.sql
+*.sql.gz
+
+# Logs
+storage/logs/*.log
+docker/logs/

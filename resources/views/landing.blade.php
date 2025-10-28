@@ -20,7 +20,7 @@
                             <a href="#akademik" class="hover:text-indigo-700">Akademik</a>
                             <a href="#kontak" class="hover:text-indigo-700">Kontak</a>
                             @auth
-                                <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50">Dashboard</a>
+                                <a href="{{ (Auth::check() && Auth::user()->role === 'admin') ? route('admin.dashboard') : route('dashboard') }}" class="px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-50">Dashboard</a>
                             @else
                                 <a href="{{ route('login') }}" class="px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Masuk</a>
                             @endauth
@@ -44,7 +44,7 @@
                             </h2>
                             <div class="mt-6 flex gap-3">
                                 @auth
-                                    <a href="{{ route('dashboard') }}" class="px-5 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Mulai Isi Survei</a>
+                                    <a href="{{ (Auth::check() && Auth::user()->role === 'admin') ? route('admin.dashboard') : route('dashboard') }}" class="px-5 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Mulai Isi Survei</a>
                                 @else
                                     <a href="{{ route('login') }}" class="px-5 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700">Masuk</a>
                                     @if (Route::has('register'))

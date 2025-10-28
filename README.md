@@ -1,13 +1,93 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SurveiV2
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi survei berbasis Laravel dengan fitur lengkap untuk manajemen survei, fasilitas, dan laporan.
 
-## About Laravel
+## 🚀 Quick Start dengan Docker
+
+### Prerequisites
+- Docker Desktop (Windows/Mac) atau Docker Engine (Linux)
+- Docker Compose
+
+### Setup Aplikasi
+
+#### Windows (PowerShell)
+```powershell
+# Clone repository
+git clone <repository-url>
+cd surveiv2
+
+# Setup development environment
+.\docker-setup.ps1 dev
+
+# Setup production environment
+.\docker-setup.ps1 prod
+```
+
+#### Linux/Mac (Bash)
+```bash
+# Clone repository
+git clone <repository-url>
+cd surveiv2
+
+# Setup development environment
+./docker-setup.sh dev
+
+# Setup production environment
+./docker-setup.sh prod
+```
+
+### Akses Aplikasi
+- **Development**: http://localhost:8000
+- **Production**: http://localhost
+
+## 📋 Fitur
+
+- ✅ Manajemen Survei
+- ✅ Manajemen Fasilitas
+- ✅ Sistem Laporan
+- ✅ Dashboard Admin
+- ✅ Authentication & Authorization
+- ✅ Queue System
+- ✅ Cache dengan Redis
+- ✅ Docker Support
+
+## 🐳 Docker Commands
+
+```bash
+# Development
+make dev              # Start development
+make dev-logs         # View logs
+make dev-stop         # Stop development
+
+# Production
+make prod             # Start production
+make prod-logs        # View logs
+make prod-stop        # Stop production
+
+# Laravel Commands
+make migrate          # Run migrations
+make seed             # Run seeders
+make cache-clear      # Clear caches
+make shell            # Access container
+```
+
+## 📚 Dokumentasi
+
+- [Docker Setup](DOCKER.md) - Dokumentasi lengkap Docker
+- [Docker Quick Start](README-DOCKER.md) - Quick start guide
+- [Laravel Documentation](https://laravel.com/docs)
+
+## 🛠️ Tech Stack
+
+- **Backend**: Laravel 12, PHP 8.2
+- **Frontend**: Blade, Tailwind CSS, Alpine.js
+- **Database**: MySQL 8.0
+- **Cache**: Redis 7
+- **Queue**: Redis
+- **Web Server**: Nginx
+- **Containerization**: Docker, Docker Compose
+
+## 📄 About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 

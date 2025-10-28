@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Remove any floating elements that might be positioned fixed */
+.fixed[style*="position: fixed"],
+.fixed[style*="position:absolute"],
+.floating,
+.fab,
+.floating-action-button,
+[class*="floating"],
+[class*="fixed"]:not(.fixed-inset-0):not(.fixed.top-0):not(.fixed.bottom-0):not(.fixed.left-0):not(.fixed.right-0) {
+    display: none !important;
+}
+
+/* Specifically target elements that might be floating on the right side */
+.fixed.right-0,
+.fixed.right-4,
+.fixed.right-8,
+[style*="right: 0"],
+[style*="right: 16px"],
+[style*="right: 32px"] {
+    display: none !important;
+}
+
+/* Hide any elements with high z-index that might be floating */
+[style*="z-index: 999"],
+[style*="z-index: 1000"],
+[style*="z-index: 9999"] {
+    display: none !important;
+}
+
+/* Target specific floating icons that might be added by external scripts */
+div[style*="position: fixed"][style*="right"],
+div[style*="position: absolute"][style*="right"],
+.circular-icon,
+.floating-icon,
+[class*="icon"][style*="position: fixed"],
+[class*="icon"][style*="position: absolute"] {
+    display: none !important;
+}
+
+/* Hide any elements that might be overlapping the chart area */
+.overlay,
+.overlay-element,
+[data-overlay],
+[data-floating] {
+    display: none !important;
+}

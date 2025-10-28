@@ -24,6 +24,12 @@
                         <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
                             {{ __('Kategori') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.semester-reports.index')" :active="request()->routeIs('admin.semester-reports.*')">
+                            {{ __('Laporan Semester') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.semester-reports.analytics')" :active="request()->routeIs('admin.semester-reports.analytics')">
+                            {{ __('Analisis Laporan') }}
+                        </x-nav-link>
                     @endif
 
                     @if(Auth::check() && Auth::user()->role !== 'admin')
@@ -93,6 +99,12 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')">
                     {{ __('Kategori') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.semester-reports.index')" :active="request()->routeIs('admin.semester-reports.*')">
+                    {{ __('Laporan Semester') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.semester-reports.analytics')" :active="request()->routeIs('admin.semester-reports.analytics')">
+                    {{ __('Analisis Laporan') }}
                 </x-responsive-nav-link>
             @endif
 
