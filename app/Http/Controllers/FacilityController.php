@@ -40,7 +40,7 @@ class FacilityController extends Controller
 
         Facility::create($request->all());
 
-        return redirect()->route('facilities.index')
+        return redirect()->route('admin.facilities.index')
             ->with('success', 'Fasilitas berhasil ditambahkan.');
     }
 
@@ -78,7 +78,7 @@ class FacilityController extends Controller
 
         $facility->update($request->all());
 
-        return redirect()->route('facilities.index')
+        return redirect()->route('admin.facilities.index')
             ->with('success', 'Fasilitas berhasil diperbarui.');
     }
 
@@ -89,7 +89,7 @@ class FacilityController extends Controller
     {
         $facility->delete();
 
-        return redirect()->route('facilities.index')
+        return redirect()->route('admin.facilities.index')
             ->with('success', 'Fasilitas berhasil dihapus.');
     }
 }
