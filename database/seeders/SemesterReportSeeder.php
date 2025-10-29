@@ -14,13 +14,13 @@ class SemesterReportSeeder extends Seeder
     public function run(): void
     {
         // Cari admin user
-        $admin = User::where('email', 'admin@surveiv2.local')->first();
+        $admin = User::where('email', 'admin@fisip.ui.ac.id')->first();
         
         if (!$admin) {
             $this->command->warn('Admin user tidak ditemukan. Membuat admin user...');
             $admin = User::create([
                 'name' => 'Admin SurveiV2',
-                'email' => 'admin@surveiv2.local',
+                'email' => 'admin@fisip.ui.ac.id',
                 'password' => bcrypt('password'),
                 'role' => 'admin',
             ]);
